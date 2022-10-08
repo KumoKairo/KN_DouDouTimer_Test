@@ -35,7 +35,6 @@ public class PersistenceLayer
         };
         
         var serializedTimers = JsonUtility.ToJson(wrapper);
-        Debug.Log(serializedTimers);
         PlayerPrefs.SetString(SaveKey, serializedTimers);
     }
 }

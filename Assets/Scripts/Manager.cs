@@ -1,42 +1,54 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
+    private const int MaxNumberOfTimers = 6;
+
     public float defaultTimerDurationSeconds = 90f;
 
     [Space] public Canvas rootCanvas;
     public TimerPanel timerPanel;
+    public Button addTimerButton;
 
     public TimerButton timerButtonPrefab;
 
     private List<TimerButton> _timerButtons;
     private List<Timer> _timers;
     private PersistenceLayer _persistenceLayer;
+    private PositioningHelper _positioningHelper;
+    private int _numberOfTimers;
 
     private void Start()
     {
-        const int numOfTimers = 4;
+        const int defaultNumOfTimers = 3;
         const float margin = 8f;
 
+        _numberOfTimers = defaultNumOfTimers;
         _persistenceLayer = new PersistenceLayer();
         var savedTimers = _persistenceLayer.TryLoad();
-        
-        _timerButtons = new List<TimerButton>(numOfTimers);
-        _timers = new List<Timer>(numOfTimers);
-        var canvasTransform = rootCanvas.transform;
-        var timerHeight = timerButtonPrefab.rectTransform.rect.height;
-        int floorHalf = numOfTimers / 2;
-        var initialOffset = floorHalf * (timerHeight + floorHalf * margin);
-        for (int i = 0; i < numOfTimers; i++)
+
+        if (savedTimers != null)
         {
-            var timerButton = Instantiate(timerButtonPrefab, canvasTransform);
-            timerButton.transform.localPosition = new Vector3(0f, -i * timerHeight - margin * i + initialOffset, 0f);
-            timerButton.Init(this, i);
+            _numberOfTimers = savedTimers.Count;
+        }
+
+        _timerButtons = new List<TimerButton>(_numberOfTimers);
+        _timers = savedTimers ?? new List<Timer>(_numberOfTimers);
+        _positioningHelper = new PositioningHelper(rootCanvas.transform, timerButtonPrefab.rectTransform.rect.height,
+            _numberOfTimers, margin);
+
+        for (int i = 0; i < _numberOfTimers; i++)
+        {
+            var timerButton = _positioningHelper.InstantiateAndPositionNewTimer(timerButtonPrefab, i, this);
             _timerButtons.Add(timerButton);
-            var timer = savedTimers != null ? savedTimers[i] : new Timer(defaultTimerDurationSeconds);
-            _timers.Add(timer);
+            if (savedTimers == null)
+            {
+                var timer = new Timer(defaultTimerDurationSeconds);
+                _timers.Add(timer);
+            }
         }
     }
 
@@ -50,6 +62,44 @@ public class Manager : MonoBehaviour
     {
         timerPanel.Hide();
         ShowTimers();
+    }
+
+    public void OnAddTimer()
+    {
+        if (_numberOfTimers >= MaxNumberOfTimers)
+        {
+            return;
+        }
+
+        _numberOfTimers++;
+
+        var timerButton =
+            _positioningHelper.InstantiateAndPositionNewTimer(timerButtonPrefab, _numberOfTimers - 1, this);
+        
+        _timerButtons.Add(timerButton);
+        var timer = new Timer(defaultTimerDurationSeconds);
+        _timers.Add(timer);
+
+        if (_numberOfTimers >= MaxNumberOfTimers)
+        {
+            addTimerButton.interactable = false;
+        }
+    }
+
+    public void OnRemoveTimer()
+    {
+        var removingAtIndex = _numberOfTimers - 1;
+        _timers.RemoveAt(removingAtIndex);
+        var timerButton = _timerButtons[removingAtIndex];
+        _timerButtons.RemoveAt(removingAtIndex);
+        Destroy(timerButton.gameObject);
+        
+        _numberOfTimers--;
+        
+        if (_numberOfTimers < MaxNumberOfTimers)
+        {
+            addTimerButton.interactable = true;
+        }
     }
 
     private void HideTimers()
