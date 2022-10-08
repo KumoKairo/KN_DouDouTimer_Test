@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,12 +13,16 @@ public class Manager : MonoBehaviour
 
     private List<TimerButton> _timerButtons;
     private List<Timer> _timers;
+    private PersistenceLayer _persistenceLayer;
 
     private void Start()
     {
         const int numOfTimers = 4;
         const float margin = 8f;
 
+        _persistenceLayer = new PersistenceLayer();
+        var savedTimers = _persistenceLayer.TryLoad();
+        
         _timerButtons = new List<TimerButton>(numOfTimers);
         _timers = new List<Timer>(numOfTimers);
         var canvasTransform = rootCanvas.transform;
@@ -26,11 +31,12 @@ public class Manager : MonoBehaviour
         var initialOffset = floorHalf * (timerHeight + floorHalf * margin);
         for (int i = 0; i < numOfTimers; i++)
         {
-            var timer = Instantiate(timerButtonPrefab, canvasTransform);
-            timer.transform.localPosition = new Vector3(0f, -i * timerHeight - margin * i + initialOffset, 0f);
-            timer.Init(this, i);
-            _timerButtons.Add(timer);
-            _timers.Add(new Timer(defaultTimerDurationSeconds));
+            var timerButton = Instantiate(timerButtonPrefab, canvasTransform);
+            timerButton.transform.localPosition = new Vector3(0f, -i * timerHeight - margin * i + initialOffset, 0f);
+            timerButton.Init(this, i);
+            _timerButtons.Add(timerButton);
+            var timer = savedTimers != null ? savedTimers[i] : new Timer(defaultTimerDurationSeconds);
+            _timers.Add(timer);
         }
     }
 
@@ -68,5 +74,10 @@ public class Manager : MonoBehaviour
         {
             _timers[i].Update();
         }
+    }
+
+    private void OnDestroy()
+    {
+        _persistenceLayer.Save(_timers);
     }
 }

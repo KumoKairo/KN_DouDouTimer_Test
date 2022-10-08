@@ -1,26 +1,34 @@
 using System;
+using System.Globalization;
 using UnityEngine;
 
-public class Timer
+[Serializable]
+public class Timer: ISerializationCallbackReceiver
 {
     private const float ChangeTick = 10;
     
     private string _timerUiValue;
-    private float _secondsLeft;
-    private float _dueAt;
+    
+    private TimeSpan _secondsLeft;
+    private DateTime _dueAt;
+    [SerializeField]
     private bool _isRunning;
+
+    [SerializeField] private double _secondsLeftSerialized;
+    [SerializeField] private string _dueAtSerialized;
 
     public Timer(float secondsLeft)
     {
         _isRunning = false;
-        _secondsLeft = secondsLeft;
+        _secondsLeft = TimeSpan.FromSeconds(secondsLeft);
+        _dueAt = DateTime.UtcNow; // Serialization / Deserialization Exception safeguard
         UpdateTimerUiValue();
     }
 
     public void Start()
     {
-        _dueAt = Time.unscaledTime + _secondsLeft;
-        if (_secondsLeft > 0f)
+        _dueAt = DateTime.UtcNow.Add(_secondsLeft);
+        if (_secondsLeft.TotalSeconds > 0f)
         {
             _isRunning = true;
         }
@@ -33,10 +41,10 @@ public class Timer
             return;
         }
 
-        _secondsLeft = _dueAt - Time.unscaledTime;
-        if (_secondsLeft < 0f)
+        _secondsLeft = _dueAt.Subtract(DateTime.UtcNow);
+        if (_secondsLeft.TotalSeconds < 0f)
         {
-            _secondsLeft = 0f;
+            _secondsLeft = TimeSpan.Zero;
             _isRunning = false;
         }
     }
@@ -61,16 +69,29 @@ public class Timer
     {
         if (_isRunning)
         {
-            _dueAt += value;
+            _dueAt = _dueAt.AddSeconds(value);
         }
         else
         {
-            _secondsLeft += value;
+            _secondsLeft = _secondsLeft.Add(TimeSpan.FromSeconds(value));
         }
     }
 
     private void UpdateTimerUiValue()
     {
-        _timerUiValue = $"{TimeSpan.FromSeconds(_secondsLeft):mm\\:ss\\:ff}";
+        _timerUiValue = $"{_secondsLeft:mm\\:ss\\:ff}";
+    }
+
+    public void OnBeforeSerialize()
+    {
+        _secondsLeftSerialized = _secondsLeft.TotalSeconds;
+        // Losing milliseconds here, but it's more robust and simple than other solutions
+        _dueAtSerialized = _dueAt.ToString(CultureInfo.InvariantCulture); 
+    }
+
+    public void OnAfterDeserialize()
+    {
+        _secondsLeft = TimeSpan.FromSeconds(_secondsLeftSerialized);
+        _dueAt = DateTime.Parse(_dueAtSerialized, CultureInfo.InvariantCulture);
     }
 }
