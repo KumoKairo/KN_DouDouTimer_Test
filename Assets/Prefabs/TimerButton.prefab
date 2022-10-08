@@ -148,13 +148,14 @@ GameObject:
   - component: {fileID: 8607963575733832835}
   - component: {fileID: 8607963575733832832}
   - component: {fileID: 4186955745504594631}
+  - component: {fileID: -1720930277056750184}
   m_Layer: 5
   m_Name: TimerButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8607963575733832833
 RectTransform:
   m_ObjectHideFlags: 0
@@ -282,6 +283,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ddb4f6db98cf8d4aaea2267bd425363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animSettings: {fileID: 11400000, guid: 6524a9d4fab2fb84f8fc10e6ebaee5af, type: 2}
   text: {fileID: 8607963574464413523}
   rectTransform: {fileID: 8607963575733832833}
   button: {fileID: 8607963575733832832}
+  canvasGroup: {fileID: -1720930277056750184}
+--- !u!225 &-1720930277056750184
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8607963575733832838}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

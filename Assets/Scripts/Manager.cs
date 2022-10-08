@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,8 +23,12 @@ public class Manager : MonoBehaviour
     private PositioningHelper _positioningHelper;
     private int _numberOfTimers;
 
-    private void Start()
+    private bool _hasInitialized;
+
+    IEnumerator Start()
     {
+        yield return new WaitForSeconds(3f); // Waiting a bit because Unity lags as hell when starting from the Editor
+        
         const int defaultNumOfTimers = 3;
         const float margin = 8f;
 
@@ -53,6 +58,8 @@ public class Manager : MonoBehaviour
         }
 
         CheckAddRemoveButtons();
+
+        _hasInitialized = true;
     }
 
     public void OnTimerClicked(int index)
@@ -132,6 +139,11 @@ public class Manager : MonoBehaviour
 
     private void Update()
     {
+        if (!_hasInitialized)
+        {
+            return;
+        }
+        
         for (int i = 0; i < _timers.Count; i++)
         {
             _timers[i].Update();
