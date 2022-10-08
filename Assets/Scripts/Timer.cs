@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Timer
 {
+    private const float ChangeTick = 10;
+    
     private string _timerUiValue;
     private float _secondsLeft;
     private float _dueAt;
@@ -43,6 +45,28 @@ public class Timer
     {
         UpdateTimerUiValue();
         return _timerUiValue;
+    }
+    
+    public void Increase()
+    {
+        ChangeTickValue(ChangeTick);
+    }
+    
+    public void Decrease()
+    {
+        ChangeTickValue(-ChangeTick);
+    }
+
+    private void ChangeTickValue(float value)
+    {
+        if (_isRunning)
+        {
+            _dueAt += value;
+        }
+        else
+        {
+            _secondsLeft += value;
+        }
     }
 
     private void UpdateTimerUiValue()

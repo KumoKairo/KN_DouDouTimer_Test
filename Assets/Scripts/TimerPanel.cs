@@ -29,10 +29,12 @@ public class TimerPanel : MonoBehaviour
 
     public void OnIncreaseTimer()
     {
+        _currentTimer.Increase();
     }
 
     public void OnDecreaseTimer()
     {
+        _currentTimer.Decrease();
     }
 
     public void OnStartTimer()
