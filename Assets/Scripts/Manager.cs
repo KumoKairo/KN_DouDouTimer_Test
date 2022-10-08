@@ -12,6 +12,7 @@ public class Manager : MonoBehaviour
     [Space] public Canvas rootCanvas;
     public TimerPanel timerPanel;
     public Button addTimerButton;
+    public Button removeTimerButton;
 
     public TimerButton timerButtonPrefab;
 
@@ -50,6 +51,8 @@ public class Manager : MonoBehaviour
                 _timers.Add(timer);
             }
         }
+
+        CheckAddRemoveButtons();
     }
 
     public void OnTimerClicked(int index)
@@ -72,22 +75,26 @@ public class Manager : MonoBehaviour
         }
 
         _numberOfTimers++;
-
         var timerButton =
             _positioningHelper.InstantiateAndPositionNewTimer(timerButtonPrefab, _numberOfTimers - 1, this);
-        
+
         _timerButtons.Add(timerButton);
         var timer = new Timer(defaultTimerDurationSeconds);
         _timers.Add(timer);
+        
+        _positioningHelper.ChangeTimersCount(_numberOfTimers);
+        _positioningHelper.RepositionButtons(_timerButtons);
 
-        if (_numberOfTimers >= MaxNumberOfTimers)
-        {
-            addTimerButton.interactable = false;
-        }
+        CheckAddRemoveButtons();
     }
 
     public void OnRemoveTimer()
     {
+        if (_timers.Count <= 1)
+        {
+            return;
+        }
+        
         var removingAtIndex = _numberOfTimers - 1;
         _timers.RemoveAt(removingAtIndex);
         var timerButton = _timerButtons[removingAtIndex];
@@ -95,11 +102,16 @@ public class Manager : MonoBehaviour
         Destroy(timerButton.gameObject);
         
         _numberOfTimers--;
-        
-        if (_numberOfTimers < MaxNumberOfTimers)
-        {
-            addTimerButton.interactable = true;
-        }
+        _positioningHelper.ChangeTimersCount(_numberOfTimers);
+        _positioningHelper.RepositionButtons(_timerButtons);
+
+        CheckAddRemoveButtons();
+    }
+
+    private void CheckAddRemoveButtons()
+    {
+        addTimerButton.interactable = _numberOfTimers < MaxNumberOfTimers;
+        removeTimerButton.interactable = _numberOfTimers > 1;
     }
 
     private void HideTimers()

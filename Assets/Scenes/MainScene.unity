@@ -976,6 +976,7 @@ MonoBehaviour:
   rootCanvas: {fileID: 618426835}
   timerPanel: {fileID: 302666939}
   addTimerButton: {fileID: 1800638692}
+  removeTimerButton: {fileID: 1502061136}
   timerButtonPrefab: {fileID: 4186955745504594631, guid: cbc179cce7eecd54a9c3d54317fc2d29, type: 3}
 --- !u!4 &1039335424
 Transform:
@@ -1362,9 +1363,9 @@ RectTransform:
   m_Father: {fileID: 618426836}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -665, y: -416}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 295, y: 133}
   m_SizeDelta: {x: 164, y: 164}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1502061136
@@ -1631,9 +1632,9 @@ RectTransform:
   m_Father: {fileID: 618426836}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -845, y: -416}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 115, y: 133}
   m_SizeDelta: {x: 164, y: 164}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1800638692

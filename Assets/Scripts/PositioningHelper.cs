@@ -1,19 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PositioningHelper
 {
     private Transform _canvasTransform;
     private float _timerHeight;
-    private int _floorHalfNumOfTimers;
+    private float _halfNumOfTimers;
     private float _initialOffset;
     private float _margin;
 
     public PositioningHelper(Transform canvasTransform, float timerHeight, int numOfTimers, float margin)
     {
-        this._canvasTransform = canvasTransform;
+        _canvasTransform = canvasTransform;
         _timerHeight = timerHeight;
-        _floorHalfNumOfTimers = numOfTimers / 2;
-        _initialOffset = _floorHalfNumOfTimers * (timerHeight + _floorHalfNumOfTimers * margin);
+        ChangeTimersCount(numOfTimers);
         _margin = margin;
     }
 
@@ -24,5 +24,21 @@ public class PositioningHelper
             -timerIndex * _timerHeight - _margin * timerIndex + _initialOffset, 0f);
         timerButton.Init(manager, timerIndex);
         return timerButton;
+    }
+
+    public void RepositionButtons(List<TimerButton> buttons)
+    {
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            var button = buttons[i];
+            button.transform.localPosition = new Vector3(0f,
+                -i * _timerHeight - _margin * i + _initialOffset, 0f);
+        }
+    }
+
+    public void ChangeTimersCount(int numOfTimers)
+    {
+        _halfNumOfTimers = numOfTimers * 0.5f;
+        _initialOffset = _halfNumOfTimers * _timerHeight;
     }
 }
