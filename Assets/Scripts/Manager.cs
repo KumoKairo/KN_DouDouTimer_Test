@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
+    // Don't want to worry about adding a dynamic scroll rect or anything, won't make much difference
     private const int MaxNumberOfTimers = 6;
 
     public float defaultTimerDurationSeconds = 90f;
@@ -36,11 +37,13 @@ public class Manager : MonoBehaviour
         _persistenceLayer = new PersistenceLayer();
         var savedTimers = _persistenceLayer.TryLoad();
 
+        // If we have timers that were stored on disk, load them instead of creating a new List<T>
         if (savedTimers != null)
         {
             _numberOfTimers = savedTimers.Count;
         }
 
+        // Safeguard against accidental button clicks
         controlButtonsGroup.blocksRaycasts = false;
         controlButtonsGroup.alpha = 0f;
 
@@ -66,6 +69,7 @@ public class Manager : MonoBehaviour
             timer.OnTimerCompleted += OnTimerCompleted;
         }
 
+        // Additionally tweening the ADD / REMOVE timer buttons. Only alpha for simplicity
         controlButtonsGroup.DOFade(1f, animSettings.genericTweenDuration)
             .OnComplete(() => { controlButtonsGroup.blocksRaycasts = true; });
         CheckAddRemoveButtons();

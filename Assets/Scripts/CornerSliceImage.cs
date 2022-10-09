@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// Custom UI Graphic logic for that one specific type of textures
+// - left-top corner texture with stretch-able 1-pixel wide center, top and bottom
+// Doesn't support Sprite Border (it's easy, but won't make any difference in this case)
+// DOES support atlases
+// One mesh -> no tears on GPU side whatsoever, perfect texture interpolation every time
 [ExecuteInEditMode]
 public class CornerSliceImage : Graphic
 {

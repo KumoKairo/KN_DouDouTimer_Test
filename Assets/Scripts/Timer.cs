@@ -81,6 +81,8 @@ public class Timer: ISerializationCallbackReceiver
         _timerUiValue = $"{_secondsLeft:mm\\:ss\\:ff}";
     }
 
+    // Serialization workaround / wrapper code
+    // We need to store a global point in time and load it back when starting again
     public void OnBeforeSerialize()
     {
         _secondsLeftSerialized = _secondsLeft.TotalSeconds;

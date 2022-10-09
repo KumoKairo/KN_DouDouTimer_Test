@@ -7,6 +7,8 @@ public class PersistenceLayer
 {
     private const string SaveKey = "Timers";
     
+    // Unity doesn't support first-class Array or List serialization
+    // This is the only reason we need to wrap this class around
     [Serializable]
     private class ArrayWrapper
     {
