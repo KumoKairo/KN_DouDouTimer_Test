@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,8 @@ public class Manager : MonoBehaviour
 
     [Space] public Canvas rootCanvas;
     public TimerPanel timerPanel;
+
+    public CanvasGroup controlButtonsGroup;
     public Button addTimerButton;
     public Button removeTimerButton;
 
@@ -40,6 +43,9 @@ public class Manager : MonoBehaviour
             _numberOfTimers = savedTimers.Count;
         }
 
+        controlButtonsGroup.blocksRaycasts = false;
+        controlButtonsGroup.alpha = 0f;
+
         _timerButtons = new List<TimerButton>(_numberOfTimers);
         _timers = savedTimers ?? new List<Timer>(_numberOfTimers);
         _positioningHelper = new PositioningHelper(rootCanvas.transform, timerButtonPrefab.rectTransform.rect.height,
@@ -59,6 +65,8 @@ public class Manager : MonoBehaviour
             }
         }
 
+        controlButtonsGroup.DOFade(1f, animSettings.genericTweenDuration)
+            .OnComplete(() => { controlButtonsGroup.blocksRaycasts = true; });
         CheckAddRemoveButtons();
 
         _hasInitialized = true;
@@ -66,6 +74,10 @@ public class Manager : MonoBehaviour
 
     public void OnTimerClicked(int index)
     {
+        controlButtonsGroup.blocksRaycasts = false;
+        controlButtonsGroup.DOFade(0f, animSettings.genericTweenDuration)
+            .OnComplete(() => { controlButtonsGroup.gameObject.SetActive(false); });
+        
         HideTimers();
         timerPanel.ShowForTimer(_timers[index]);
     }
@@ -74,6 +86,10 @@ public class Manager : MonoBehaviour
     {
         timerPanel.Hide();
         ShowTimers();
+        
+        controlButtonsGroup.gameObject.SetActive(true);
+        controlButtonsGroup.DOFade(1f, animSettings.genericTweenDuration)
+            .OnComplete(() => { controlButtonsGroup.blocksRaycasts = true; });
     }
 
     public void OnAddTimer()

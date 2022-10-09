@@ -110,8 +110,7 @@ public class TimerButton : MonoBehaviour
 
     public void EaseOutDestroy()
     {
-        const float offsetRelativeScale = 4f;
-        var newY = rectTransform.localPosition.y - animSettings.timerPositionOffsetY * offsetRelativeScale;
+        var newY = rectTransform.localPosition.y - rectTransform.rect.height;
         canvasGroup.DOFade(0f, animSettings.genericTweenDuration);
         rectTransform.DOLocalMoveY(newY, animSettings.genericTweenDuration)
             .SetEase(animSettings.genericEasing)
