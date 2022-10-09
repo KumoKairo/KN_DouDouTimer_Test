@@ -7,8 +7,6 @@ public class Timer: ISerializationCallbackReceiver
 {
     public event Action<int> OnTimerCompleted; 
 
-    private const float ChangeTick = 10;
-    
     private string _timerUiValue;
     
     private TimeSpan _secondsLeft;
@@ -62,17 +60,7 @@ public class Timer: ISerializationCallbackReceiver
         return _timerUiValue;
     }
     
-    public void Increase()
-    {
-        ChangeTickValue(ChangeTick);
-    }
-    
-    public void Decrease()
-    {
-        ChangeTickValue(-ChangeTick);
-    }
-
-    private void ChangeTickValue(float value)
+    public void ChangeTickValue(float value)
     {
         if (_isRunning)
         {

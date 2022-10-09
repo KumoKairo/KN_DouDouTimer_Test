@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class TimerPanel : MonoBehaviour
 {
+    public float timerChangeAcceleration = 0.5f;
+
     public TextMeshProUGUI timerText;
     public Manager manager;
     public CanvasGroup canvasGroup;
@@ -12,6 +14,8 @@ public class TimerPanel : MonoBehaviour
     public AnimationSettings animSettings;
 
     private Timer _currentTimer;
+    private int _timerIncrementStep;
+    private float _currentTimerIncrementSpeed;
     
     public void ShowForTimer(Timer timer)
     {
@@ -46,16 +50,25 @@ public class TimerPanel : MonoBehaviour
             .OnComplete(() => { gameObject.SetActive(false); });
     }
 
-    public void OnIncreaseTimer()
+    // Pointer Down
+    public void OnIncreaseTimerBegin()
     {
-        _currentTimer.Increase();
+        _timerIncrementStep = 1;
+    }
+    
+    // Pointer Down
+    public void OnDecreaseTimerBegin()
+    {
+        _timerIncrementStep = -1;
     }
 
-    public void OnDecreaseTimer()
+    // Pointer Up
+    public void OnChangeTimerEnd()
     {
-        _currentTimer.Decrease();
+        _timerIncrementStep = 0;
+        _currentTimerIncrementSpeed = 0f;
     }
-
+    
     public void OnStartTimer()
     {
         _currentTimer.Start();
@@ -69,6 +82,12 @@ public class TimerPanel : MonoBehaviour
 
     private void Update()
     {
+        if (_timerIncrementStep != 0)
+        {
+            _currentTimerIncrementSpeed += _timerIncrementStep * Time.deltaTime * timerChangeAcceleration;
+            _currentTimer.ChangeTickValue(_currentTimerIncrementSpeed);
+        }
+        
         UpdateTimerText();
     }
 }
