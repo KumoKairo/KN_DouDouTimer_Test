@@ -16,6 +16,7 @@ public class Manager : MonoBehaviour
     public Button removeTimerButton;
 
     public TimerButton timerButtonPrefab;
+    public AnimationSettings animSettings;
 
     private List<TimerButton> _timerButtons;
     private List<Timer> _timers;
@@ -25,10 +26,8 @@ public class Manager : MonoBehaviour
 
     private bool _hasInitialized;
 
-    IEnumerator Start()
+    private void Start()
     {
-        yield return new WaitForSeconds(1.5f); // Waiting a bit because Unity lags as hell when starting from the Editor
-        
         const int defaultNumOfTimers = 3;
         const float margin = 8f;
 
@@ -44,11 +43,14 @@ public class Manager : MonoBehaviour
         _timerButtons = new List<TimerButton>(_numberOfTimers);
         _timers = savedTimers ?? new List<Timer>(_numberOfTimers);
         _positioningHelper = new PositioningHelper(rootCanvas.transform, timerButtonPrefab.rectTransform.rect.height,
-            _numberOfTimers, margin);
+            _numberOfTimers, margin, animSettings);
 
         for (int i = 0; i < _numberOfTimers; i++)
         {
-            var timerButton = _positioningHelper.InstantiateAndPositionNewTimer(timerButtonPrefab, i, this);
+            var timerButton = _positioningHelper.InstantiateAndPositionNewTimer(timerButtonPrefab, i);
+            timerButton.Init(this, i);
+            timerButton.TweenInFromSide(this);
+
             _timerButtons.Add(timerButton);
             if (savedTimers == null)
             {
@@ -82,13 +84,15 @@ public class Manager : MonoBehaviour
         }
 
         _numberOfTimers++;
-        var timerButton =
-            _positioningHelper.InstantiateAndPositionNewTimer(timerButtonPrefab, _numberOfTimers - 1, this);
+        var timerIndex = _numberOfTimers - 1;
+        var timerButton = _positioningHelper.InstantiateAndPositionNewTimer(timerButtonPrefab, timerIndex);
+        timerButton.Init(this, timerIndex);
+        timerButton.TweenInFromBottom();
 
         _timerButtons.Add(timerButton);
         var timer = new Timer(defaultTimerDurationSeconds);
         _timers.Add(timer);
-        
+
         _positioningHelper.ChangeTimersCount(_numberOfTimers);
         _positioningHelper.RepositionButtons(_timerButtons);
 
@@ -101,13 +105,13 @@ public class Manager : MonoBehaviour
         {
             return;
         }
-        
+
         var removingAtIndex = _numberOfTimers - 1;
         _timers.RemoveAt(removingAtIndex);
         var timerButton = _timerButtons[removingAtIndex];
         _timerButtons.RemoveAt(removingAtIndex);
-        Destroy(timerButton.gameObject);
-        
+        timerButton.EaseOutDestroy();
+
         _numberOfTimers--;
         _positioningHelper.ChangeTimersCount(_numberOfTimers);
         _positioningHelper.RepositionButtons(_timerButtons);
@@ -143,7 +147,7 @@ public class Manager : MonoBehaviour
         {
             return;
         }
-        
+
         for (int i = 0; i < _timers.Count; i++)
         {
             _timers[i].Update();

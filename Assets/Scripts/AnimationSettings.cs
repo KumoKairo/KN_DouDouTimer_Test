@@ -5,6 +5,7 @@ using UnityEngine;
 public class AnimationSettings : ScriptableObject
 {
    public float timerButtonPositionOffset = -80f;
+   public float timerPositionOffsetY = 16f;
    public float genericTweenDuration = 1f;
    public float genericDelay = 0.3f;
    public float interScreenDelay = 0.5f;

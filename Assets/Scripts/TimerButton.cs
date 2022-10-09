@@ -22,7 +22,10 @@ public class TimerButton : MonoBehaviour
         _manager = manager;
         _index = index;
         text.text = $"Timer {index + 1}";
+    }
 
+    public void TweenInFromSide(Manager manager)
+    {
         canvasGroup.blocksRaycasts = false;
         var localPos = rectTransform.localPosition;
         localPos.x = -manager.rootCanvas.GetComponent<CanvasScaler>().referenceResolution.x * 0.5f -
@@ -35,7 +38,19 @@ public class TimerButton : MonoBehaviour
         var anim = DOTween.Sequence();
         anim.Insert(0f, rectTransform.DOLocalMoveX(0f, animSettings.genericTweenDuration, true));
         anim.Insert(0f, canvasGroup.DOFade(1f, animSettings.genericTweenDuration));
-        anim.SetDelay(animSettings.genericDelay * index);
+        anim.SetDelay(animSettings.genericDelay * _index);
+
+        anim.OnComplete(() => { canvasGroup.blocksRaycasts = true; });
+    }
+
+    public void TweenInFromBottom()
+    {
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 0f;
+        gameObject.SetActive(true);
+
+        var anim = DOTween.Sequence();
+        anim.Insert(0f, canvasGroup.DOFade(1f, animSettings.genericTweenDuration));
         anim.OnComplete(() => { canvasGroup.blocksRaycasts = true; });
     }
 
@@ -52,7 +67,7 @@ public class TimerButton : MonoBehaviour
         {
             _currentlyRunningSequence.Complete(true);
         }
-        
+
         var anim = DOTween.Sequence();
         anim.Insert(0f, rectTransform.DOLocalMoveX(-animSettings.timerButtonPositionOffset,
             animSettings.genericTweenDuration,
@@ -60,7 +75,8 @@ public class TimerButton : MonoBehaviour
         anim.Insert(0f, canvasGroup.DOFade(0f, animSettings.genericTweenDuration));
         anim.SetEase(animSettings.genericEasing);
         anim.SetDelay(animSettings.genericDelay * _index);
-        anim.OnComplete(() => { 
+        anim.OnComplete(() =>
+        {
             gameObject.SetActive(false);
             _currentlyRunningSequence = null;
         });
@@ -74,7 +90,7 @@ public class TimerButton : MonoBehaviour
         {
             _currentlyRunningSequence.Complete(true);
         }
-        
+
         gameObject.SetActive(true);
 
         var anim = DOTween.Sequence();
@@ -88,7 +104,17 @@ public class TimerButton : MonoBehaviour
             canvasGroup.blocksRaycasts = true;
             _currentlyRunningSequence = null;
         });
-        
+
         _currentlyRunningSequence = anim;
+    }
+
+    public void EaseOutDestroy()
+    {
+        const float offsetRelativeScale = 4f;
+        var newY = rectTransform.localPosition.y - animSettings.timerPositionOffsetY * offsetRelativeScale;
+        canvasGroup.DOFade(0f, animSettings.genericTweenDuration);
+        rectTransform.DOLocalMoveY(newY, animSettings.genericTweenDuration)
+            .SetEase(animSettings.genericEasing)
+            .OnComplete(() => { Destroy(gameObject); });
     }
 }
