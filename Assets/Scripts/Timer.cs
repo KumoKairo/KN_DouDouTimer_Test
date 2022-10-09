@@ -5,6 +5,8 @@ using UnityEngine;
 [Serializable]
 public class Timer: ISerializationCallbackReceiver
 {
+    public event Action<int> OnTimerCompleted; 
+
     private const float ChangeTick = 10;
     
     private string _timerUiValue;
@@ -13,15 +15,18 @@ public class Timer: ISerializationCallbackReceiver
     private DateTime _dueAt;
     [SerializeField]
     private bool _isRunning;
+    [SerializeField]
+    private int _index;
 
     [SerializeField] private double _secondsLeftSerialized;
     [SerializeField] private string _dueAtSerialized;
 
-    public Timer(float secondsLeft)
+    public Timer(float secondsLeft, int index)
     {
         _isRunning = false;
         _secondsLeft = TimeSpan.FromSeconds(secondsLeft);
         _dueAt = DateTime.UtcNow; // Serialization / Deserialization Exception safeguard
+        _index = index;
         UpdateTimerUiValue();
     }
 
@@ -46,6 +51,8 @@ public class Timer: ISerializationCallbackReceiver
         {
             _secondsLeft = TimeSpan.Zero;
             _isRunning = false;
+
+            OnTimerCompleted?.Invoke(_index);
         }
     }
 

@@ -15,3 +15,9 @@ MonoBehaviour:
   timerButtonPositionOffset: -80
   genericTweenDuration: 0.5
   genericDelay: 0.15
+  interScreenDelay: 0.5
+  genericEasing: 9
+  timerWobbleDuration: 5
+  timerWobbleStrength: 0.3
+  timerWobbleVibrato: 10
+  timerWobbleElasticity: 0.344
