@@ -44,9 +44,6 @@ public class CornerSliceImage : Graphic
          
          var vert = UIVertex.simpleVert;
 
-         var xUvOffset = sliceBorder.x / imageSize.width; // almost 1
-         var yUvOffset = sliceBorder.y / imageSize.height; // almost 0
-
          // First row
          var currentYLine = leftCorner.y;
          vert.position = new Vector2(leftCorner.x, currentYLine);
