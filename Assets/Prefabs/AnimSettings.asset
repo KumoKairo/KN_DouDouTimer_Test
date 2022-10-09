@@ -17,7 +17,7 @@ MonoBehaviour:
   genericDelay: 0.15
   interScreenDelay: 0.5
   genericEasing: 9
-  timerWobbleDuration: 5
-  timerWobbleStrength: 0.3
-  timerWobbleVibrato: 10
-  timerWobbleElasticity: 0.344
+  timerWobbleDuration: 2
+  timerWobbleStrength: 0.15
+  timerWobbleVibrato: 2
+  timerWobbleElasticity: 0.3

@@ -29,8 +29,8 @@ public class TimerButton : MonoBehaviour
     {
         canvasGroup.blocksRaycasts = false;
         var localPos = rectTransform.localPosition;
-        localPos.x = -manager.rootCanvas.GetComponent<CanvasScaler>().referenceResolution.x * 0.5f -
-                     rectTransform.rect.width;
+        var offScreenPosition = GetOffScreenPosition();
+        localPos.x = offScreenPosition;
 
         rectTransform.localPosition = localPos;
         canvasGroup.alpha = 0f;
@@ -42,6 +42,12 @@ public class TimerButton : MonoBehaviour
         anim.SetDelay(animSettings.genericDelay * _index);
 
         anim.OnComplete(() => { canvasGroup.blocksRaycasts = true; });
+    }
+
+    private float GetOffScreenPosition()
+    {
+        return -_manager.rootCanvas.pixelRect.width * 0.5f -
+               rectTransform.rect.width;
     }
 
     public void TweenInFromBottom()
@@ -78,7 +84,7 @@ public class TimerButton : MonoBehaviour
         }
 
         var anim = DOTween.Sequence();
-        anim.Insert(0f, rectTransform.DOLocalMoveX(-animSettings.timerButtonPositionOffset,
+        anim.Insert(0f, rectTransform.DOLocalMoveX(GetOffScreenPosition(),
             animSettings.genericTweenDuration,
             true));
         anim.Insert(0f, canvasGroup.DOFade(0f, animSettings.genericTweenDuration));
@@ -100,6 +106,10 @@ public class TimerButton : MonoBehaviour
             _currentlyRunningInOutSequence.Complete(true);
         }
 
+        var localPos = rectTransform.localPosition;
+        localPos.x = GetOffScreenPosition();
+        rectTransform.localPosition = localPos;
+        
         gameObject.SetActive(true);
 
         var anim = DOTween.Sequence();
@@ -107,6 +117,7 @@ public class TimerButton : MonoBehaviour
             rectTransform.DOLocalMoveX(0f, animSettings.genericTweenDuration, true));
 
         anim.Insert(0f, canvasGroup.DOFade(1f, animSettings.genericTweenDuration));
+        anim.SetDelay(animSettings.genericDelay * _index);
         anim.SetEase(animSettings.genericEasing);
         anim.OnComplete(() =>
         {
