@@ -12,11 +12,10 @@ public class CornerSliceImage : Graphic
    {
       if (image != null)
       {
-         var sliceBorder = image.border;
          var imageSize = image.rect;
          var rect = rectTransform.rect;
          var pivot = rectTransform.pivot;
-
+         
          // Won't handle reduced size for now, not worth the trouble
          var minSize = new Vector2(imageSize.width * 2f, imageSize.height * 2f);
          rect.width = Mathf.Max(minSize.x, rect.width);
@@ -43,77 +42,82 @@ public class CornerSliceImage : Graphic
          vh.Clear();
          
          var vert = UIVertex.simpleVert;
+         
+         var zeroX = image.uv[2].x;
+         var zeroY = image.uv[2].y;
+         var oneX = image.uv[1].x;
+         var oneY = image.uv[1].y;
 
          // First row
          var currentYLine = leftCorner.y;
          vert.position = new Vector2(leftCorner.x, currentYLine);
-         vert.uv0 = new Vector2(0f, 1f);
+         vert.uv0 = new Vector2(zeroX, oneY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(leftCorner.x + imageSize.width, currentYLine);
-         vert.uv0 = new Vector2(1f, 1f);
+         vert.uv0 = new Vector2(oneX, oneY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(rightCorner.x - imageSize.width, currentYLine);
-         vert.uv0 = new Vector2(1f, 1f);
+         vert.uv0 = new Vector2(oneX, oneY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(rightCorner.x, currentYLine);
-         vert.uv0 = new Vector2(0f, 1f);
+         vert.uv0 = new Vector2(zeroX, oneY);
          vh.AddVert(vert);
          
          // Second row
          currentYLine = leftCorner.y + imageSize.height;
          vert.position = new Vector2(leftCorner.x, currentYLine);
-         vert.uv0 = new Vector2(0f, 0f);
+         vert.uv0 = new Vector2(zeroX, zeroY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(leftCorner.x + imageSize.width, currentYLine);
-         vert.uv0 = new Vector2(1f, 0f);
+         vert.uv0 = new Vector2(oneX, zeroY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(rightCorner.x - imageSize.width, currentYLine);
-         vert.uv0 = new Vector2(1f, 0f);
+         vert.uv0 = new Vector2(oneX, zeroY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(rightCorner.x, currentYLine);
-         vert.uv0 = new Vector2(0f, 0f);
+         vert.uv0 = new Vector2(zeroX, zeroY);
          vh.AddVert(vert);
 
          // Third row
          currentYLine = rightCorner.y - imageSize.height;
          vert.position = new Vector2(leftCorner.x, currentYLine);
-         vert.uv0 = new Vector2(0f, 0f);
+         vert.uv0 = new Vector2(zeroX, zeroY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(leftCorner.x + imageSize.width, currentYLine);
-         vert.uv0 = new Vector2(1f, 0f);
+         vert.uv0 = new Vector2(oneX, zeroY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(rightCorner.x - imageSize.width, currentYLine);
-         vert.uv0 = new Vector2(1f, 0f);
+         vert.uv0 = new Vector2(oneX, zeroY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(rightCorner.x, currentYLine);
-         vert.uv0 = new Vector2(0f, 0f);
+         vert.uv0 = new Vector2(zeroX, zeroY);
          vh.AddVert(vert);
 
          // Fourth row
          currentYLine = rightCorner.y;
          vert.position = new Vector2(leftCorner.x, currentYLine);
-         vert.uv0 = new Vector2(0f, 1f);
+         vert.uv0 = new Vector2(zeroX, oneY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(leftCorner.x + imageSize.width, currentYLine);
-         vert.uv0 = new Vector2(1f, 1f);
+         vert.uv0 = new Vector2(oneX, oneY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(rightCorner.x - imageSize.width, currentYLine);
-         vert.uv0 = new Vector2(1f, 1f);
+         vert.uv0 = new Vector2(oneX, oneY);
          vh.AddVert(vert);
          
          vert.position = new Vector2(rightCorner.x, currentYLine);
-         vert.uv0 = new Vector2(0f, 1f);
+         vert.uv0 = new Vector2(zeroX, oneY);
          vh.AddVert(vert);
          
          vh.AddTriangle(0, 5, 1);
