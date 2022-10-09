@@ -74,6 +74,10 @@ public class Timer: ISerializationCallbackReceiver
         else
         {
             _secondsLeft = _secondsLeft.Add(TimeSpan.FromSeconds(value));
+            if (_secondsLeft.TotalSeconds < 0.0)
+            {
+                _secondsLeft = TimeSpan.Zero;
+            }
         }
     }
 

@@ -27,7 +27,7 @@ public class Manager : MonoBehaviour
 
     IEnumerator Start()
     {
-        yield return new WaitForSeconds(3f); // Waiting a bit because Unity lags as hell when starting from the Editor
+        yield return new WaitForSeconds(1.5f); // Waiting a bit because Unity lags as hell when starting from the Editor
         
         const int defaultNumOfTimers = 3;
         const float margin = 8f;

@@ -270,6 +270,7 @@ GameObject:
   - component: {fileID: 302666938}
   - component: {fileID: 302666937}
   - component: {fileID: 302666939}
+  - component: {fileID: 302666940}
   m_Layer: 5
   m_Name: TimerPanel
   m_TagString: Untagged
@@ -351,7 +352,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerText: {fileID: 1811604402}
   manager: {fileID: 1039335423}
-  buttons: []
+  canvasGroup: {fileID: 302666940}
+  rectTransform: {fileID: 302666936}
+  animSettings: {fileID: 11400000, guid: 6524a9d4fab2fb84f8fc10e6ebaee5af, type: 2}
+--- !u!225 &302666940
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302666935}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +502,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 900, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1365,8 +1380,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 295, y: 133}
-  m_SizeDelta: {x: 164, y: 164}
+  m_AnchoredPosition: {x: 114.1, y: 46}
+  m_SizeDelta: {x: 64, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1502061136
 MonoBehaviour:
@@ -1634,8 +1649,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 115, y: 133}
-  m_SizeDelta: {x: 164, y: 164}
+  m_AnchoredPosition: {x: 43, y: 46}
+  m_SizeDelta: {x: 64, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1800638692
 MonoBehaviour:
@@ -1766,7 +1781,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0016022, y: 94.7951}
+  m_AnchoredPosition: {x: 0.003254, y: 94.79}
   m_SizeDelta: {x: 627.08, y: 76.6898}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1811604402

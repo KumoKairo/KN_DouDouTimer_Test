@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,25 +7,43 @@ public class TimerPanel : MonoBehaviour
 {
     public TextMeshProUGUI timerText;
     public Manager manager;
-
-    public Button[] buttons;
+    public CanvasGroup canvasGroup;
+    public RectTransform rectTransform;
+    public AnimationSettings animSettings;
 
     private Timer _currentTimer;
     
     public void ShowForTimer(Timer timer)
     {
         _currentTimer = timer;
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 0f;
+        var localPos = rectTransform.localPosition;
+        localPos.x = animSettings.timerButtonPositionOffset;
+        rectTransform.localPosition = localPos;
         gameObject.SetActive(true);
         UpdateTimerText();
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            buttons[i].interactable = true;
-        }
+
+        rectTransform.DOLocalMoveX(0f, animSettings.genericTweenDuration)
+            .SetDelay(animSettings.interScreenDelay)
+            .SetEase(animSettings.genericEasing);
+        
+        canvasGroup.DOFade(1f, animSettings.genericTweenDuration)
+            .SetDelay(animSettings.interScreenDelay)
+            .SetEase(animSettings.genericEasing)
+            .OnComplete(() => { canvasGroup.blocksRaycasts = true; });
     }
 
     public void Hide()
     {
-        gameObject.SetActive(false);
+        canvasGroup.blocksRaycasts = false;
+
+        rectTransform.DOLocalMoveX(animSettings.timerButtonPositionOffset, animSettings.genericTweenDuration)
+            .SetEase(animSettings.genericEasing);
+        
+        canvasGroup.DOFade(0f, animSettings.genericTweenDuration)
+            .SetEase(animSettings.genericEasing)
+            .OnComplete(() => { gameObject.SetActive(false); });
     }
 
     public void OnIncreaseTimer()

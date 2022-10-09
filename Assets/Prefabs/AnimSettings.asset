@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 489c8741e2739b74092cf95a74acd3c2, type: 3}
   m_Name: AnimSettings
   m_EditorClassIdentifier: 
+  timerButtonPositionOffset: -80
   genericTweenDuration: 0.5
-  genericDelay: 0.3
+  genericDelay: 0.15
